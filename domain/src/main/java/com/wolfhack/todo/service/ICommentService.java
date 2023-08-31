@@ -1,6 +1,6 @@
 package com.wolfhack.todo.service;
 
-import com.wolfhack.todo.model.domain.Comment;
+import com.wolfhack.todo.model.Comment;
 
 public interface ICommentService {
 

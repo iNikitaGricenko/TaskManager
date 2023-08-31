@@ -10,7 +10,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Base64;
 
-@Component
 public class PBKDF2Encoder implements PasswordEncoder {
 
 	@Value("${jwt.password.encoder.secret}")
@@ -23,19 +22,19 @@ public class PBKDF2Encoder implements PasswordEncoder {
 	private Integer keylength;
 
 	@Override
-	public String encode(CharSequence cs) {
+	public String encode(CharSequence rawPassword) {
 		try {
 			byte[] result = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512")
-					.generateSecret(new PBEKeySpec(cs.toString().toCharArray(), secret.getBytes(), iteration, keylength))
+					.generateSecret(new PBEKeySpec(rawPassword.toString().toCharArray(), secret.getBytes(), iteration, keylength))
 					.getEncoded();
 			return Base64.getEncoder().encodeToString(result);
-		} catch (NoSuchAlgorithmException | InvalidKeySpecException ex) {
-			throw new RuntimeException(ex);
+		} catch (NoSuchAlgorithmException | InvalidKeySpecException exception) {
+			throw new RuntimeException(exception);
 		}
-	}
+		}
 
 	@Override
-	public boolean matches(CharSequence cs, String string) {
-		return encode(cs).equals(string);
+	public boolean matches(CharSequence rawPassword, String string) {
+		return encode(rawPassword).equals(string);
 	}
 }

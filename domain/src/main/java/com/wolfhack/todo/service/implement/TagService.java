@@ -2,7 +2,7 @@ package com.wolfhack.todo.service.implement;
 
 import com.wolfhack.todo.adapter.database.TagDatabaseAdapter;
 import com.wolfhack.todo.adapter.database.TaskDatabaseAdapter;
-import com.wolfhack.todo.model.domain.Tag;
+import com.wolfhack.todo.model.Tag;
 import com.wolfhack.todo.service.ITagService;
 import com.wolfhack.todo.service.ITaskTagService;
 import lombok.RequiredArgsConstructor;

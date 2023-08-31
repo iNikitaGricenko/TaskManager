@@ -1,7 +1,7 @@
 package com.wolfhack.todo.adapter.database;
 
-import com.wolfhack.todo.model.DomainModel;
-import com.wolfhack.todo.model.DomainPage;
+import com.wolfhack.todo.adapter.DomainModel;
+import com.wolfhack.todo.wrapper.DomainPage;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 

@@ -1,8 +1,8 @@
 package com.wolfhack.todo.service.implement;
 
 import com.wolfhack.todo.adapter.database.UserDatabaseAdapter;
-import com.wolfhack.todo.model.DomainPage;
-import com.wolfhack.todo.model.domain.User;
+import com.wolfhack.todo.wrapper.DomainPage;
+import com.wolfhack.todo.model.User;
 import com.wolfhack.todo.service.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -32,6 +32,11 @@ public class UserService implements IUserService {
 
 	public DomainPage<User> getPage(Pageable pageable) {
 		return userDatabaseAdapter.getPage(pageable);
+	}
+
+	@Override
+	public User getByUsername(String username) {
+		return userDatabaseAdapter.getByUsername(username);
 	}
 
 }

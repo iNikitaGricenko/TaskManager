@@ -1,6 +1,6 @@
 package com.wolfhack.todo.service;
 
-import com.wolfhack.todo.model.domain.Activity;
+import com.wolfhack.todo.model.Activity;
 
 public interface IActivityService {
 

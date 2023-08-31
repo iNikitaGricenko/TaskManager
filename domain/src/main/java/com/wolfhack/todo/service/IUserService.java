@@ -1,7 +1,7 @@
 package com.wolfhack.todo.service;
 
-import com.wolfhack.todo.model.DomainPage;
-import com.wolfhack.todo.model.domain.User;
+import com.wolfhack.todo.wrapper.DomainPage;
+import com.wolfhack.todo.model.User;
 import org.springframework.data.domain.Pageable;
 
 public interface IUserService {
@@ -14,4 +14,5 @@ public interface IUserService {
 
 	DomainPage<User> getPage(Pageable pageable);
 
+	User getByUsername(String username);
 }

@@ -1,0 +1,21 @@
+version: "3.7"
+services:
+  # Start Postgres
+  postgres-db:
+    image: postgres
+    container_name: postgres-db
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=task-manager
+    ports:
+      - "5432:5432"
+    networks:
+      - postgres-db
+  # End Mysql
+
+networks:
+  default: {}
+  postgres-db:
+    name: postgres

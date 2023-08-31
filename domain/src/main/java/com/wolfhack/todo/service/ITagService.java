@@ -1,6 +1,6 @@
 package com.wolfhack.todo.service;
 
-import com.wolfhack.todo.model.domain.Tag;
+import com.wolfhack.todo.model.Tag;
 
 public interface ITagService {
 

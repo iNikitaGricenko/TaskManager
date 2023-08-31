@@ -1,6 +1,6 @@
 package com.wolfhack.todo.service;
 
-import com.wolfhack.todo.model.domain.TaskMeta;
+import com.wolfhack.todo.model.TaskMeta;
 
 public interface ITaskMetaService {
 

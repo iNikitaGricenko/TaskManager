@@ -1,7 +1,9 @@
 package com.wolfhack.todo.service;
 
-import com.wolfhack.todo.model.DomainPage;
-import com.wolfhack.todo.model.domain.*;
+import com.wolfhack.todo.model.Activity;
+import com.wolfhack.todo.model.Comment;
+import com.wolfhack.todo.wrapper.DomainPage;
+import com.wolfhack.todo.model.Task;
 import org.springframework.data.domain.Pageable;
 
 public interface ITaskService {

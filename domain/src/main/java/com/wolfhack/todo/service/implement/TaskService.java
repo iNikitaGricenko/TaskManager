@@ -1,11 +1,11 @@
 package com.wolfhack.todo.service.implement;
 
 import com.wolfhack.todo.adapter.database.*;
-import com.wolfhack.todo.model.DomainPage;
-import com.wolfhack.todo.model.domain.Activity;
-import com.wolfhack.todo.model.domain.Comment;
-import com.wolfhack.todo.model.domain.Task;
-import com.wolfhack.todo.model.domain.User;
+import com.wolfhack.todo.wrapper.DomainPage;
+import com.wolfhack.todo.model.Activity;
+import com.wolfhack.todo.model.Comment;
+import com.wolfhack.todo.model.Task;
+import com.wolfhack.todo.model.User;
 import com.wolfhack.todo.service.ITaskService;
 import com.wolfhack.todo.service.ITaskTagService;
 import lombok.RequiredArgsConstructor;
