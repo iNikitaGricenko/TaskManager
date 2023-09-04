@@ -1,12 +1,9 @@
 package com.wolfhack.todo.service.implement;
 
 import com.wolfhack.todo.adapter.database.*;
-import com.wolfhack.todo.security.model.UserSecurity;
+import com.wolfhack.todo.model.*;
+import com.wolfhack.todo.service.ITaskMetaService;
 import com.wolfhack.todo.wrapper.DomainPage;
-import com.wolfhack.todo.model.Activity;
-import com.wolfhack.todo.model.Comment;
-import com.wolfhack.todo.model.Task;
-import com.wolfhack.todo.model.User;
 import com.wolfhack.todo.service.ITaskService;
 import com.wolfhack.todo.service.ITaskTagService;
 import lombok.RequiredArgsConstructor;
@@ -37,23 +34,30 @@ public class TaskService implements ITaskService {
 
 	private final ITaskTagService taskTagService;
 
+	private final ITaskMetaService taskMetaService;
+
 	@Override
 	public Long create(Task task) {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if ((authentication instanceof AnonymousAuthenticationToken)) {
-			throw new RuntimeException();
-		}
-		Long principalId = (Long) authentication.getCredentials();
-		User user = userDatabaseAdapter.getById(principalId);
+		User user = getCurrentUser();
 
 		task.create();
 		task.setCreatedBy(user);
+
+		validateAndAssignTaskUser(task);
+
 		return taskDatabaseAdapter.save(task);
 	}
 
 	@Override
 	public void start(long id) {
 		Task task = get(id);
+
+		if (task.getUser() == null) {
+			task.setUser(getCurrentUser());
+		} else if (!task.getUser().equals(getCurrentUser())) {
+			throw new RuntimeException("You cannot start a task, only assigned user can start it");
+		}
+
 		task.start();
 		update(id, task);
 	}
@@ -64,18 +68,23 @@ public class TaskService implements ITaskService {
 	}
 
 	@Override
+	public long addMeta(long id, TaskMeta taskMeta) {
+		if (!taskDatabaseAdapter.exists(id)) {
+			throw new RuntimeException();
+		}
+
+		Long metaId = taskMetaService.create(taskMeta);
+		return taskMetaService.assignTask(id, metaId);
+	}
+
+	@Override
 	public DomainPage<Task> getPage(Pageable pageable) {
 		return taskDatabaseAdapter.getPage(pageable);
 	}
 
 	@Override
 	public void update(long id, Task task) {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if ((authentication instanceof AnonymousAuthenticationToken)) {
-			throw new RuntimeException();
-		}
-		Long principalId = (Long) authentication.getCredentials();
-		User user = userDatabaseAdapter.getById(principalId);
+		User user = getCurrentUser();
 
 		List<User> updatedBy = Optional.ofNullable(task.getUpdatedBy()).orElse(new LinkedList<>());
 		updatedBy.add(user);
@@ -119,5 +128,33 @@ public class TaskService implements ITaskService {
 		task.finish();
 		task.setUpdatedAt(LocalDate.now());
 		return taskDatabaseAdapter.update(id, task);
+	}
+
+	private User getCurrentUser() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if ((authentication instanceof AnonymousAuthenticationToken)) {
+			throw new RuntimeException();
+		}
+		Long principalId = (Long) authentication.getCredentials();
+		return userDatabaseAdapter.getById(principalId);
+	}
+
+	private void validateAndAssignTaskUser(Task task) {
+		User taskUser = task.getUser();
+		if (taskUser != null) {
+			if (taskUser.getId() == null) {
+
+				if (taskUser.haveUsername()) {
+					User byUsername = userDatabaseAdapter.getByUsername(taskUser.getUsername());
+					task.setUser(byUsername);
+				} else if (taskUser.haveEmail()) {
+					User byEmail = userDatabaseAdapter.getByEmail(taskUser.getEmail());
+					task.setUser(byEmail);
+				} else {
+					task.setUser(null);
+				}
+
+			}
+		}
 	}
 }

@@ -2,6 +2,7 @@ package com.wolfhack.todo.model;
 
 import com.wolfhack.todo.adapter.DomainModel;
 import lombok.Data;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
@@ -46,6 +47,14 @@ public class User implements DomainModel {
 	public void login() {
 		this.online = true;
 		this.lastLogin = LocalDateTime.now();
+	}
+
+	public boolean haveUsername() {
+		return !Strings.isEmpty(this.username) && !Strings.isBlank(this.username);
+	}
+
+	public boolean haveEmail() {
+		return !Strings.isEmpty(this.email) && !Strings.isBlank(this.email);
 	}
 
 }

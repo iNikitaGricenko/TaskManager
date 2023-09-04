@@ -4,7 +4,8 @@ import com.wolfhack.todo.model.EntityTask;
 import com.wolfhack.todo.model.Task;
 import org.mapstruct.*;
 
-@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING,
+		uses = {EntityUserMapper.class})
 public interface EntityTaskMapper {
 	@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 	EntityTask toEntity(Task task);

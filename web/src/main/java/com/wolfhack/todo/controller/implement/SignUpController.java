@@ -29,7 +29,6 @@ public class SignUpController implements SignUpEndpoints {
 				.build();
 	}
 
-	@RolesAllowed({ "USER", "ADMIN" })
 	@GetMapping("/test")
 	public String test() {
 		return "Successfully signed up";

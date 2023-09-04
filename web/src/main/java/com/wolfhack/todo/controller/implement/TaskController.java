@@ -3,12 +3,16 @@ package com.wolfhack.todo.controller.implement;
 import com.wolfhack.todo.controller.TaskEndpoints;
 import com.wolfhack.todo.mapper.WebCommentMapper;
 import com.wolfhack.todo.mapper.WebTaskMapper;
+import com.wolfhack.todo.mapper.WebTaskMetaMapper;
 import com.wolfhack.todo.model.Comment;
+import com.wolfhack.todo.model.CreateTaskMetaDTO;
 import com.wolfhack.todo.model.Task;
+import com.wolfhack.todo.model.TaskMeta;
 import com.wolfhack.todo.model.create.CommentCreateDTO;
 import com.wolfhack.todo.model.create.TaskCreateDTO;
 import com.wolfhack.todo.service.ICommentService;
 import com.wolfhack.todo.service.ITaskService;
+import jakarta.annotation.security.RolesAllowed;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,12 +20,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/task")
 @RequiredArgsConstructor
+@RolesAllowed({ "USER", "ADMIN" })
 public class TaskController implements TaskEndpoints {
 
 	private final ITaskService taskService;
 	private final ICommentService commentService;
 	private final WebTaskMapper taskMapper;
 	private final WebCommentMapper commentMapper;
+	private final WebTaskMetaMapper taskMetaMapper;
 
 	@Override
 	public long create(TaskCreateDTO taskCreateDTO) {
@@ -43,6 +49,12 @@ public class TaskController implements TaskEndpoints {
 	@Override
 	public void start(Long id) {
 		taskService.start(id);
+	}
+
+	@Override
+	public long addMeta(Long id, CreateTaskMetaDTO taskMetaDTO) {
+		TaskMeta taskMeta = taskMetaMapper.toModel(taskMetaDTO);
+		return taskService.addMeta(id, taskMeta);
 	}
 
 	@Override

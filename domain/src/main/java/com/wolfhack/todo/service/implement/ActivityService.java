@@ -4,6 +4,7 @@ import com.wolfhack.todo.adapter.database.ActivityDatabaseAdapter;
 import com.wolfhack.todo.adapter.database.TaskDatabaseAdapter;
 import com.wolfhack.todo.adapter.database.UserDatabaseAdapter;
 import com.wolfhack.todo.model.Activity;
+import com.wolfhack.todo.model.Task;
 import com.wolfhack.todo.model.User;
 import com.wolfhack.todo.service.IActivityService;
 import lombok.RequiredArgsConstructor;
@@ -28,52 +29,38 @@ public class ActivityService implements IActivityService {
 	@Override
 	public Long create(Long taskId, Activity activity) {
 		if (!taskDatabaseAdapter.exists(taskId)) {
-			throw new RuntimeException();
-		}
-
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if ((authentication instanceof AnonymousAuthenticationToken)) {
-			throw new RuntimeException();
+			throw new RuntimeException("task does not exist");
 		}
 
 		activity.create();
 		activity.setTaskId(taskId);
 
-		Long principalId = (Long) authentication.getCredentials();
-		User user = userDatabaseAdapter.getById(principalId);
-
+		User user = getCurrentUser();
 		activity.setCreatedBy(user);
+		activity.setUser(user);
 
-		return activityDatabaseAdapter.save(activity);
+		try {
+			return activityDatabaseAdapter.save(activity);
+		} finally {
+			updateTask(activity);
+		}
 	}
 
 	@Override
 	public void start(Long id) {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if ((authentication instanceof AnonymousAuthenticationToken)) {
-			throw new RuntimeException();
-		}
-
 		Activity activity = activityDatabaseAdapter.getById(id);
 		activity.start();
 
-		Long principalId = (Long) authentication.getCredentials();
-		User user = userDatabaseAdapter.getById(principalId);
+		User user = getCurrentUser();
 		activity.setUser(user);
 
-		activity.setUpdatedAt(LocalDate.now());
-
-		activityDatabaseAdapter.update(id, activity);
+		update(id, activity);
+		updateTask(activity);
 	}
 
 	@Override
 	public void update(Long id, Activity activity) {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if ((authentication instanceof AnonymousAuthenticationToken)) {
-			throw new RuntimeException();
-		}
-		Long principalId = (Long) authentication.getCredentials();
-		User user = userDatabaseAdapter.getById(principalId);
+		User user = getCurrentUser();
 
 		activity.setUpdatedAt(LocalDate.now());
 
@@ -88,7 +75,29 @@ public class ActivityService implements IActivityService {
 	public Long finish(Long id) {
 		Activity activity = activityDatabaseAdapter.getById(id);
 		activity.finish();
+
 		update(id, activity);
+		updateTask(activity);
+
 		return id;
+	}
+
+	private void updateTask(Activity activity) {
+		Long taskId = activity.getTaskId();
+		Task task = taskDatabaseAdapter.getById(taskId);
+		List<User> updatedBy = Optional.ofNullable(task.getUpdatedBy()).orElse(new LinkedList<>());
+		updatedBy.add(getCurrentUser());
+
+		task.setUpdatedAt(LocalDate.now());
+		taskDatabaseAdapter.update(taskId, task);
+	}
+
+	private User getCurrentUser() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if ((authentication instanceof AnonymousAuthenticationToken)) {
+			throw new RuntimeException();
+		}
+		Long principalId = (Long) authentication.getCredentials();
+		return userDatabaseAdapter.getById(principalId);
 	}
 }

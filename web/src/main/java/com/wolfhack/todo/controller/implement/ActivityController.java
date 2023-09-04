@@ -9,6 +9,7 @@ import com.wolfhack.todo.model.create.ActivityCreateDTO;
 import com.wolfhack.todo.model.create.CommentCreateDTO;
 import com.wolfhack.todo.service.IActivityService;
 import com.wolfhack.todo.service.ICommentService;
+import jakarta.annotation.security.RolesAllowed;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/activity")
 @RequiredArgsConstructor
+@RolesAllowed({ "USER", "ADMIN" })
 public class ActivityController implements ActivityEndpoints {
 
 	private final IActivityService activityService;

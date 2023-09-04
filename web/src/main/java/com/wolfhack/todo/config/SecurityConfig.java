@@ -21,6 +21,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.web.cors.CorsConfiguration;
@@ -42,12 +43,12 @@ public class SecurityConfig {
 	private final JwtFilter jwtFilter;
 
 	@Bean
-	public SecurityFilterChain securityWebFilterChain(HttpSecurity http, AuthenticationProvider authenticationProvider) throws Exception {
+	public SecurityFilterChain securityWebFilterChain(HttpSecurity http) throws Exception {
 		http.exceptionHandling(exceptionHandler -> exceptionHandler
-						.authenticationEntryPoint((request, response, authException) -> response.sendError(HttpStatus.UNAUTHORIZED.value(), authException.getMessage()))
-						.accessDeniedHandler((request, response, accessDeniedException) -> response.sendError(HttpStatus.FORBIDDEN.value(), accessDeniedException.getMessage())))
+						.authenticationEntryPoint((request, response, accessDeniedException) -> response.setStatus(HttpStatus.UNAUTHORIZED.value()))
+						.accessDeniedHandler((request, response, accessDeniedException) -> response.setStatus(HttpStatus.FORBIDDEN.value())))
 				.authorizeHttpRequests((authorize) ->
-						authorize.requestMatchers("/sign-up", "/sign-in", "/activate/**").permitAll()
+						authorize.requestMatchers("/sign-up", "/sign-in", "/activate/**").anonymous()
 								.anyRequest().authenticated())
 				.sessionManagement((manager) -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authenticationManager(jwtAuthenticationManager)

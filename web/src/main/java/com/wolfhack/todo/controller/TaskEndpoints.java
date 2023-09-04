@@ -1,5 +1,6 @@
 package com.wolfhack.todo.controller;
 
+import com.wolfhack.todo.model.CreateTaskMetaDTO;
 import com.wolfhack.todo.model.create.CommentCreateDTO;
 import com.wolfhack.todo.model.create.TaskCreateDTO;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,10 @@ public interface TaskEndpoints {
 	@PostMapping("/start/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	void start(@PathVariable Long id);
+
+	@PostMapping("/meta/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	long addMeta(@PathVariable Long id, @RequestBody CreateTaskMetaDTO taskMetaDTO);
 
 	@DeleteMapping("/finish/{id}")
 	@ResponseStatus(HttpStatus.OK)

@@ -4,7 +4,8 @@ import com.wolfhack.todo.model.EntityComment;
 import com.wolfhack.todo.model.Comment;
 import org.mapstruct.*;
 
-@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING,
+		uses = {EntityTaskMapper.class, EntityUserMapper.class})
 public interface EntityCommentMapper {
 	@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 	EntityComment toEntity(Comment comment);

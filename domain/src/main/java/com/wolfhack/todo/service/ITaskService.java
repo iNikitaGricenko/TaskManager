@@ -2,6 +2,7 @@ package com.wolfhack.todo.service;
 
 import com.wolfhack.todo.model.Activity;
 import com.wolfhack.todo.model.Comment;
+import com.wolfhack.todo.model.TaskMeta;
 import com.wolfhack.todo.wrapper.DomainPage;
 import com.wolfhack.todo.model.Task;
 import org.springframework.data.domain.Pageable;
@@ -13,6 +14,8 @@ public interface ITaskService {
 	void start(long id);
 
 	Task get(long id);
+
+	long addMeta(long id, TaskMeta taskMeta);
 
 	DomainPage<Task> getPage(Pageable pageable);
 

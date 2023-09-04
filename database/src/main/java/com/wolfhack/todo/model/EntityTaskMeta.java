@@ -6,6 +6,9 @@ import org.hibernate.proxy.HibernateProxy;
 
 import java.util.Objects;
 
+/**
+ * @Description Used to store additional information about {@link EntityTask}
+ **/
 @Getter
 @Setter
 @ToString
@@ -22,6 +25,9 @@ public class EntityTaskMeta {
 
 	@Column(name = "key")
 	private String key;
+
+	@Column(name = "content")
+	private String content;
 
 	@Override
 	public final boolean equals(Object object) {

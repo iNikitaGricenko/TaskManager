@@ -12,4 +12,6 @@ public class TaskMeta implements DomainModel {
 
 	private String key;
 
+	private String content;
+
 }
