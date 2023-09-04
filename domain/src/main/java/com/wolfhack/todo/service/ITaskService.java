@@ -29,6 +29,9 @@ public interface ITaskService {
 
 	void assignUser(long id, long userId);
 
+	void unassign(long id);
+
 	long finish(long id);
 
+	void delete(Long id);
 }

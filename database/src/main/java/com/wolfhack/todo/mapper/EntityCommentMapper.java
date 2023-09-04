@@ -16,5 +16,6 @@ public interface EntityCommentMapper {
 	EntityComment partialUpdate(Comment comment, @MappingTarget EntityComment entityComment);
 
 	@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+	@Mapping(target = "task", source = ".")
 	Comment partialUpdate(Comment from, @MappingTarget Comment to);
 }

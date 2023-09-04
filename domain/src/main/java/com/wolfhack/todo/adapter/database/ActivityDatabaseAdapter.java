@@ -6,6 +6,8 @@ import org.springframework.data.domain.Pageable;
 
 public interface ActivityDatabaseAdapter extends DatabaseGateway<Activity> {
 
+	Long update(Long id, Activity model);
+
 	DomainPage<Activity> getByTask(Long taskId, Pageable pageable);
 
 }

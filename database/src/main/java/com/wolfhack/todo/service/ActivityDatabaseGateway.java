@@ -29,9 +29,17 @@ public class ActivityDatabaseGateway implements ActivityDatabaseAdapter {
 	}
 
 	@Override
-	public Long update(Long id, Activity model) {
+	public Long partialUpdate(Long id, Activity model) {
 		Activity activity = getById(id);
 		activity = activityMapper.partialUpdate(model, activity);
+
+		return save(activity);
+	}
+
+	@Override
+	public Long update(Long id, Activity model) {
+		Activity activity = getById(id);
+		activity = activityMapper.update(model, activity);
 
 		return save(activity);
 	}

@@ -91,7 +91,7 @@ public class TaskService implements ITaskService {
 
 		task.setUpdatedBy(updatedBy);
 		task.setUpdatedAt(LocalDate.now());
-		taskDatabaseAdapter.update(id, task);
+		taskDatabaseAdapter.partialUpdate(id, task);
 	}
 
 	@Override
@@ -119,6 +119,14 @@ public class TaskService implements ITaskService {
 		User user = userDatabaseAdapter.getById(userId);
 		task.setUser(user);
 		task.setUpdatedAt(LocalDate.now());
+		taskDatabaseAdapter.partialUpdate(id, task);
+	}
+
+	@Override
+	public void unassign(long id) {
+		Task task = get(id);
+		task.setUser(null);
+		task.setUpdatedAt(LocalDate.now());
 		taskDatabaseAdapter.update(id, task);
 	}
 
@@ -127,7 +135,15 @@ public class TaskService implements ITaskService {
 		Task task = get(id);
 		task.finish();
 		task.setUpdatedAt(LocalDate.now());
-		return taskDatabaseAdapter.update(id, task);
+		return taskDatabaseAdapter.partialUpdate(id, task);
+	}
+
+	@Override
+	public void delete(Long id) {
+		if (!taskDatabaseAdapter.exists(id)) {
+			throw new RuntimeException("task does not exist");
+		}
+		taskDatabaseAdapter.delete(id);
 	}
 
 	private User getCurrentUser() {

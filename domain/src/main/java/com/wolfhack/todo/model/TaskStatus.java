@@ -7,6 +7,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum TaskStatus {
 
-	STARTING, IN_PROGRESS, COMPLETED, PAUSED, CANCELLED
+	STARTING("Starting"),
+	IN_PROGRESS("In Progress"),
+	COMPLETED("Completed"),
+	PAUSED("Paused"),
+	CANCELLED("Cancelled");
+
+	private final String title;
 
 }

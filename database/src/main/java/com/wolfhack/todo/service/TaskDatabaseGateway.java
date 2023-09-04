@@ -29,7 +29,7 @@ public class TaskDatabaseGateway implements TaskDatabaseAdapter {
 	}
 
 	@Override
-	public Long update(Long id, Task model) {
+	public Long partialUpdate(Long id, Task model) {
 		Task task = getById(id);
 		task = taskMapper.partialUpdate(model, task);
 
@@ -67,4 +67,11 @@ public class TaskDatabaseGateway implements TaskDatabaseAdapter {
 		taskRepository.deleteById(id);
 	}
 
+	@Override
+	public long update(long id, Task model) {
+		Task task = getById(id);
+		task = taskMapper.update(model, task);
+
+		return save(task);
+	}
 }

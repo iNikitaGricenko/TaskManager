@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 public record TaskCreateDTO(
+		Long tagId,
 		Long userId,
 		String userUsername,
 		String userEmail,

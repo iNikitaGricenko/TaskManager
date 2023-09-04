@@ -29,7 +29,7 @@ public class TagDatabaseGateway implements TagDatabaseAdapter {
 	}
 
 	@Override
-	public Long update(Long id, Tag model) {
+	public Long partialUpdate(Long id, Tag model) {
 		Tag tag = getById(id);
 		tag = tagMapper.partialUpdate(model, tag);
 

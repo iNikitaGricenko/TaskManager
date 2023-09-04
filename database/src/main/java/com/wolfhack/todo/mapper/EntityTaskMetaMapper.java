@@ -16,5 +16,6 @@ public interface EntityTaskMetaMapper {
 	EntityTaskMeta partialUpdate(TaskMeta taskMeta, @MappingTarget EntityTaskMeta entityTaskMeta);
 
 	@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+	@Mapping(target = "task", source = ".")
 	TaskMeta partialUpdate(TaskMeta from, @MappingTarget TaskMeta to);
 }

@@ -19,4 +19,7 @@ public interface EntityActivityMapper {
 
 	@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 	Activity partialUpdate(Activity from, @MappingTarget Activity to);
+
+	@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL)
+	Activity update(Activity from, @MappingTarget Activity to);
 }

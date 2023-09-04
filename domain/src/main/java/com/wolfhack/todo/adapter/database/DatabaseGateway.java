@@ -13,7 +13,7 @@ public interface DatabaseGateway<T extends DomainModel> {
 
 	Long save(T model);
 
-	Long update(Long id, T model);
+	Long partialUpdate(Long id, T model);
 
 	T getById(Long id);
 

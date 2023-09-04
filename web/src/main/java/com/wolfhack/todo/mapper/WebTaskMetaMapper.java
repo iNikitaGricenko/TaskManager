@@ -1,6 +1,6 @@
 package com.wolfhack.todo.mapper;
 
-import com.wolfhack.todo.model.CreateTaskMetaDTO;
+import com.wolfhack.todo.model.create.TaskMetaCreateDTO;
 import com.wolfhack.todo.model.TaskMeta;
 import org.mapstruct.*;
 
@@ -8,6 +8,6 @@ import org.mapstruct.*;
 public interface WebTaskMetaMapper {
 
 	@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-	TaskMeta toModel(CreateTaskMetaDTO createTaskMetaDTO);
+	TaskMeta toModel(TaskMetaCreateDTO createTaskMetaDTO);
 
 }

@@ -23,7 +23,7 @@ public class TagService implements ITagService {
 
 	@Override
 	public void update(Long id, Tag tag) {
-		tagDatabaseAdapter.update(id, tag);
+		tagDatabaseAdapter.partialUpdate(id, tag);
 	}
 
 	@Override

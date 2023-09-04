@@ -29,7 +29,7 @@ public class UserDatabaseGateway implements UserDatabaseAdapter {
 	}
 
 	@Override
-	public Long update(Long id, User model) {
+	public Long partialUpdate(Long id, User model) {
 		User user = getById(id);
 		user = userMapper.partialUpdate(model, user);
 

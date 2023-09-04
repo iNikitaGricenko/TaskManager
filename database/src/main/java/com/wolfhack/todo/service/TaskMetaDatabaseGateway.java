@@ -29,7 +29,7 @@ public class TaskMetaDatabaseGateway implements TaskMetaDatabaseAdapter {
 	}
 
 	@Override
-	public Long update(Long id, TaskMeta model) {
+	public Long partialUpdate(Long id, TaskMeta model) {
 		TaskMeta taskMeta = getById(id);
 		taskMeta = taskMetaMapper.partialUpdate(model, taskMeta);
 

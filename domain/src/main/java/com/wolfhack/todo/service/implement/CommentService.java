@@ -55,7 +55,7 @@ public class CommentService implements ICommentService {
 	@Override
 	public void updateComment(Long id, Comment comment) {
 		comment.setUpdatedAt(LocalDateTime.now());
-		commentDatabaseAdapter.update(id, comment);
+		commentDatabaseAdapter.partialUpdate(id, comment);
 	}
 
 	private User getCurrentUser() {

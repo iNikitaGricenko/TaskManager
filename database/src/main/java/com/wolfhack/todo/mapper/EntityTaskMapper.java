@@ -17,4 +17,7 @@ public interface EntityTaskMapper {
 
 	@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 	Task partialUpdate(Task from, @MappingTarget Task to);
+
+	@BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL)
+	Task update(Task from, @MappingTarget Task to);
 }

@@ -29,7 +29,7 @@ public class CommentDatabaseGateway implements CommentDatabaseAdapter {
 	}
 
 	@Override
-	public Long update(Long id, Comment model) {
+	public Long partialUpdate(Long id, Comment model) {
 		Comment comment = getById(id);
 		comment = commentMapper.partialUpdate(model, comment);
 

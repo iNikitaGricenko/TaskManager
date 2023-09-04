@@ -13,6 +13,8 @@ public class Task implements DomainModel {
 
 	private Long id;
 
+	private Long tagId;
+
 	private User user;
 
 	private User createdBy;

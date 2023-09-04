@@ -7,6 +7,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum ActivityStatus {
 
-	 STARTED, DONE, OPEN, CANCELLED
+	STARTED("Started"),
+	DONE("Done"),
+	OPEN("Open"),
+	CANCELLED("Cancelled");
+
+	private final String title;
 
 }

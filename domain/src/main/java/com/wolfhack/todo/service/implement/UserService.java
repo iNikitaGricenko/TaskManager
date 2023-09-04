@@ -23,7 +23,7 @@ public class UserService implements IUserService {
 
 	@Override
 	public void update(Long id, User user) {
-		userDatabaseAdapter.update(id, user);
+		userDatabaseAdapter.partialUpdate(id, user);
 	}
 
 	public User getById(Long id) {

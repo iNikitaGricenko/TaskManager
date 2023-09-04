@@ -1,11 +1,9 @@
 package com.wolfhack.todo.service;
 
-import com.wolfhack.todo.model.JwtResponse;
+import com.wolfhack.todo.model.response.JwtResponse;
 import com.wolfhack.todo.model.User;
-import com.wolfhack.todo.security.model.UserSecurity;
 import com.wolfhack.todo.security.service.JwtSigner;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

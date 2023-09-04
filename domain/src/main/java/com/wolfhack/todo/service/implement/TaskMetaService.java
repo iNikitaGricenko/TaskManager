@@ -22,7 +22,7 @@ public class TaskMetaService implements ITaskMetaService {
 
 	@Override
 	public void update(Long id, TaskMeta taskMeta) {
-		taskMetaDatabaseAdapter.update(id, taskMeta);
+		taskMetaDatabaseAdapter.partialUpdate(id, taskMeta);
 	}
 
 	@Override
@@ -31,6 +31,6 @@ public class TaskMetaService implements ITaskMetaService {
 		Task task = taskDatabaseAdapter.getById(taskId);
 		taskMeta.setTask(task);
 
-		return taskMetaDatabaseAdapter.update(id, taskMeta);
+		return taskMetaDatabaseAdapter.partialUpdate(id, taskMeta);
 	}
 }

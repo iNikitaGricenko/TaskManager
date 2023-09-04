@@ -7,7 +7,9 @@ import com.wolfhack.todo.model.Activity;
 import com.wolfhack.todo.model.Task;
 import com.wolfhack.todo.model.User;
 import com.wolfhack.todo.service.IActivityService;
+import com.wolfhack.todo.wrapper.DomainPage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -54,8 +56,21 @@ public class ActivityService implements IActivityService {
 		User user = getCurrentUser();
 		activity.setUser(user);
 
-		update(id, activity);
+		partialUpdate(id, activity);
 		updateTask(activity);
+	}
+
+	@Override
+	public void partialUpdate(Long id, Activity activity) {
+		User user = getCurrentUser();
+
+		activity.setUpdatedAt(LocalDate.now());
+
+		List<User> updatedBy = Optional.ofNullable(activity.getUpdatedBy()).orElse(new LinkedList<>());
+		updatedBy.add(user);
+		activity.setUpdatedBy(updatedBy);
+
+		activityDatabaseAdapter.partialUpdate(id, activity);
 	}
 
 	@Override
@@ -76,10 +91,15 @@ public class ActivityService implements IActivityService {
 		Activity activity = activityDatabaseAdapter.getById(id);
 		activity.finish();
 
-		update(id, activity);
+		partialUpdate(id, activity);
 		updateTask(activity);
 
 		return id;
+	}
+
+	@Override
+	public DomainPage<Activity> getPage(Long taskId, Pageable pageable) {
+		return activityDatabaseAdapter.getByTask(taskId, pageable);
 	}
 
 	private void updateTask(Activity activity) {
@@ -89,7 +109,7 @@ public class ActivityService implements IActivityService {
 		updatedBy.add(getCurrentUser());
 
 		task.setUpdatedAt(LocalDate.now());
-		taskDatabaseAdapter.update(taskId, task);
+		taskDatabaseAdapter.partialUpdate(taskId, task);
 	}
 
 	private User getCurrentUser() {

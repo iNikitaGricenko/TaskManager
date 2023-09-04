@@ -3,6 +3,7 @@ package com.wolfhack.todo.wrapper;
 import lombok.Data;
 import org.springframework.data.domain.Page;
 
+import java.util.Collection;
 import java.util.List;
 
 @Data
@@ -23,6 +24,14 @@ public class DomainPage<T> {
 		this.currentPage = page.getNumber();
 		this.totalPages = page.getTotalPages();
 		this.numberOfElements = page.getSize();
+		this.totalElements = page.getTotalElements();
+	}
+
+	public DomainPage(DomainPage<?> page, List<T> content) {
+		this.content = content;
+		this.currentPage = page.currentPage;
+		this.totalPages = page.getTotalPages();
+		this.numberOfElements = page.numberOfElements;
 		this.totalElements = page.getTotalElements();
 	}
 
