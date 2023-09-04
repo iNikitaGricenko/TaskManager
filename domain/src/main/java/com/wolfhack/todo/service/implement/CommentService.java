@@ -4,6 +4,8 @@ import com.wolfhack.todo.adapter.database.ActivityDatabaseAdapter;
 import com.wolfhack.todo.adapter.database.CommentDatabaseAdapter;
 import com.wolfhack.todo.adapter.database.TaskDatabaseAdapter;
 import com.wolfhack.todo.adapter.database.UserDatabaseAdapter;
+import com.wolfhack.todo.exception.NotFoundException;
+import com.wolfhack.todo.exception.UnauthorizedException;
 import com.wolfhack.todo.model.Activity;
 import com.wolfhack.todo.model.Comment;
 import com.wolfhack.todo.model.Task;
@@ -29,7 +31,7 @@ public class CommentService implements ICommentService {
 	@Override
 	public Long addCommentToTask(Comment comment, Long taskId) {
 		if (!taskDatabaseAdapter.exists(taskId)) {
-			throw new RuntimeException();
+			throw new NotFoundException();
 		}
 		comment.setCreatedAt(LocalDateTime.now());
 		comment.setUser(getCurrentUser());
@@ -42,7 +44,7 @@ public class CommentService implements ICommentService {
 	@Override
 	public Long addCommentToActivity(Comment comment, Long activityId) {
 		if (!activityDatabaseAdapter.exists(activityId)) {
-			throw new RuntimeException();
+			throw new NotFoundException();
 		}
 		comment.setCreatedAt(LocalDateTime.now());
 		comment.setUser(getCurrentUser());
@@ -61,7 +63,7 @@ public class CommentService implements ICommentService {
 	private User getCurrentUser() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if ((authentication instanceof AnonymousAuthenticationToken)) {
-			throw new RuntimeException();
+			throw new UnauthorizedException();
 		}
 		Long principalId = (Long) authentication.getCredentials();
 		return userDatabaseAdapter.getById(principalId);

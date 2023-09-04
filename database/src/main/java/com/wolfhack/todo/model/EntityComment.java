@@ -16,27 +16,31 @@ public class EntityComment {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private Long id;
 
 	@ManyToOne
+	@JoinColumn(name = "task", referencedColumnName = "id", updatable = false)
 	private EntityTask task;
 
 	@ManyToOne
+	@JoinColumn(name = "activity", referencedColumnName = "id", updatable = false)
 	private EntityActivity activity;
 
 	@ManyToOne
+	@JoinColumn(name = "user_id", updatable = false, nullable = false)
 	private EntityUser user;
 
-	@Column(name = "title")
+	@Column(name = "title", nullable = false)
 	private String title;
 
-	@Column(name = "creadted_at")
+	@Column(name = "creadted_at", nullable = false)
 	private LocalDateTime createdAt;
 
 	@Column(name = "updated_at")
 	private LocalDateTime updatedAt;
 
-	@Column(name = "content")
+	@Column(name = "content", nullable = false)
 	private String content;
 
 	@Override

@@ -16,7 +16,9 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -49,6 +51,7 @@ public class SecurityConfig {
 						.accessDeniedHandler((request, response, accessDeniedException) -> response.setStatus(HttpStatus.FORBIDDEN.value())))
 				.authorizeHttpRequests((authorize) ->
 						authorize.requestMatchers("/sign-up", "/sign-in", "/activate/**").anonymous()
+								.requestMatchers("/swagger-ui/**").permitAll()
 								.anyRequest().authenticated())
 				.sessionManagement((manager) -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authenticationManager(jwtAuthenticationManager)
@@ -60,6 +63,11 @@ public class SecurityConfig {
 		http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
 		return http.build();
+	}
+
+	@Bean
+	public WebSecurityCustomizer webSecurityCustomizer() {
+		return (web) -> web.ignoring().requestMatchers("/v3/api-docs/**");
 	}
 
 	@Bean

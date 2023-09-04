@@ -17,36 +17,37 @@ public class EntityTask {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private Long id;
 
 	@ManyToOne
-	@JoinColumn
 	@ToString.Exclude
+	@JoinColumn(name = "user_id")
 	private EntityUser user;
 
 	@ManyToOne
-	@JoinColumn
+	@JoinColumn(name = "created_by_id", updatable = false, nullable = false)
 	private EntityUser createdBy;
 
 	@OneToMany
-	@JoinColumn
+	@JoinColumn(name = "updated_by_id")
 	@ToString.Exclude
 	private List<EntityUser> updatedBy = new LinkedList<>();
 
-	@Column(name = "title")
+	@Column(name = "title", unique = true)
 	private String title;
 
 	@Column(name = "description")
 	private String description;
 
-	@Column(name = "status")
+	@Column(name = "status", nullable = false)
 	@Enumerated(EnumType.STRING)
 	private TaskStatus status;
 
-	@Column(name = "hours")
+	@Column(name = "hours", nullable = false)
 	private float hours;
 
-	@Column(name = "created_at")
+	@Column(name = "created_at", nullable = false)
 	private LocalDate createdAt;
 
 	@Column(name = "updated_at")

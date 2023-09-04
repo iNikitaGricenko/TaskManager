@@ -15,12 +15,15 @@ public class EntityTaskTag {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private Long id;
 
 	@OneToOne
+	@JoinColumn(name = "tag", referencedColumnName = "id", nullable = false)
 	private EntityTag tag;
 
 	@OneToOne
+	@JoinColumn(name = "task", referencedColumnName = "id", nullable = false)
 	private EntityTask task;
 
 	@Override

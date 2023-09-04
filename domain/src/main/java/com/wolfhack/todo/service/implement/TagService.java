@@ -2,6 +2,7 @@ package com.wolfhack.todo.service.implement;
 
 import com.wolfhack.todo.adapter.database.TagDatabaseAdapter;
 import com.wolfhack.todo.adapter.database.TaskDatabaseAdapter;
+import com.wolfhack.todo.exception.NotFoundException;
 import com.wolfhack.todo.model.Tag;
 import com.wolfhack.todo.service.ITagService;
 import com.wolfhack.todo.service.ITaskTagService;
@@ -29,7 +30,7 @@ public class TagService implements ITagService {
 	@Override
 	public void addTask(Long id, Long taskId) {
 		if (!taskDatabaseAdapter.exists(taskId) && !tagDatabaseAdapter.exists(id)) {
-			throw new RuntimeException();
+			throw new NotFoundException();
 		}
 
 		taskTagService.create(taskId, id);

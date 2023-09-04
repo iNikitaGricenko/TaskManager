@@ -3,6 +3,8 @@ package com.wolfhack.todo.service.implement;
 import com.wolfhack.todo.adapter.database.ActivityDatabaseAdapter;
 import com.wolfhack.todo.adapter.database.TaskDatabaseAdapter;
 import com.wolfhack.todo.adapter.database.UserDatabaseAdapter;
+import com.wolfhack.todo.exception.NotFoundException;
+import com.wolfhack.todo.exception.UnauthorizedException;
 import com.wolfhack.todo.model.Activity;
 import com.wolfhack.todo.model.Task;
 import com.wolfhack.todo.model.User;
@@ -31,7 +33,7 @@ public class ActivityService implements IActivityService {
 	@Override
 	public Long create(Long taskId, Activity activity) {
 		if (!taskDatabaseAdapter.exists(taskId)) {
-			throw new RuntimeException("task does not exist");
+			throw new NotFoundException("Task does not exist");
 		}
 
 		activity.create();
@@ -115,7 +117,7 @@ public class ActivityService implements IActivityService {
 	private User getCurrentUser() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if ((authentication instanceof AnonymousAuthenticationToken)) {
-			throw new RuntimeException();
+			throw new UnauthorizedException();
 		}
 		Long principalId = (Long) authentication.getCredentials();
 		return userDatabaseAdapter.getById(principalId);

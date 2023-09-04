@@ -17,34 +17,35 @@ public class EntityUser {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private Long id;
 
-	@Column(name = "role")
+	@Column(name = "role", nullable = false)
 	@Enumerated(EnumType.STRING)
 	private Role role;
 
-	@Column(name = "first_name")
+	@Column(name = "first_name", nullable = false)
 	private String firstName;
 
-	@Column(name = "last_name")
+	@Column(name = "last_name", nullable = false)
 	private String lastName;
 
-	@Column(name = "username")
+	@Column(name = "username", nullable = false, unique = true)
 	private String username;
 
-	@Column(name = "email")
+	@Column(name = "email", nullable = false, unique = true)
 	private String email;
 
-	@Column(name = "password")
+	@Column(name = "password", nullable = false)
 	private String password;
 
-	@Column(name = "registration_date")
+	@Column(name = "registration_date", nullable = false)
 	private LocalDate registrationDate;
 
-	@Column(name = "last_login")
+	@Column(name = "last_login", nullable = false)
 	private LocalDateTime lastLogin;
 
-	@Column(name = "online")
+	@Column(name = "online", nullable = false)
 	private boolean online;
 
 	@Column(name = "intro")

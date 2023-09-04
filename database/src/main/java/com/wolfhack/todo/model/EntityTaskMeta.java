@@ -6,9 +6,6 @@ import org.hibernate.proxy.HibernateProxy;
 
 import java.util.Objects;
 
-/**
- * @Description Used to store additional information about {@link EntityTask}
- **/
 @Getter
 @Setter
 @ToString
@@ -18,12 +15,14 @@ public class EntityTaskMeta {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private Long id;
 
 	@OneToOne
+	@JoinColumn(name = "task", referencedColumnName = "id")
 	private EntityTask task;
 
-	@Column(name = "key")
+	@Column(name = "key", unique = true)
 	private String key;
 
 	@Column(name = "content")

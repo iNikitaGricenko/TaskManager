@@ -2,11 +2,13 @@ package com.wolfhack.todo.model.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.wolfhack.todo.model.TaskStatus;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+@Schema
 public record TaskResponseDTO(
 		Long id,
 		Long tagId,

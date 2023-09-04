@@ -1,6 +1,9 @@
 package com.wolfhack.todo.service.implement;
 
 import com.wolfhack.todo.adapter.database.*;
+import com.wolfhack.todo.exception.ForbiddenException;
+import com.wolfhack.todo.exception.NotFoundException;
+import com.wolfhack.todo.exception.UnauthorizedException;
 import com.wolfhack.todo.model.*;
 import com.wolfhack.todo.service.ITaskMetaService;
 import com.wolfhack.todo.wrapper.DomainPage;
@@ -55,7 +58,7 @@ public class TaskService implements ITaskService {
 		if (task.getUser() == null) {
 			task.setUser(getCurrentUser());
 		} else if (!task.getUser().equals(getCurrentUser())) {
-			throw new RuntimeException("You cannot start a task, only assigned user can start it");
+			throw new ForbiddenException("You cannot start a task. Only assigned user can start it");
 		}
 
 		task.start();
@@ -70,7 +73,7 @@ public class TaskService implements ITaskService {
 	@Override
 	public long addMeta(long id, TaskMeta taskMeta) {
 		if (!taskDatabaseAdapter.exists(id)) {
-			throw new RuntimeException();
+			throw new NotFoundException();
 		}
 
 		Long metaId = taskMetaService.create(taskMeta);
@@ -97,7 +100,7 @@ public class TaskService implements ITaskService {
 	@Override
 	public void addTag(long id, long tagId) {
 		if (!taskDatabaseAdapter.exists(id) && !tagDatabaseAdapter.exists(tagId)) {
-			throw new RuntimeException();
+			throw new NotFoundException();
 		}
 
 		taskTagService.create(id, tagId);
@@ -141,7 +144,7 @@ public class TaskService implements ITaskService {
 	@Override
 	public void delete(Long id) {
 		if (!taskDatabaseAdapter.exists(id)) {
-			throw new RuntimeException("task does not exist");
+			throw new NotFoundException("Task does not exist");
 		}
 		taskDatabaseAdapter.delete(id);
 	}
@@ -149,7 +152,7 @@ public class TaskService implements ITaskService {
 	private User getCurrentUser() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if ((authentication instanceof AnonymousAuthenticationToken)) {
-			throw new RuntimeException();
+			throw new UnauthorizedException();
 		}
 		Long principalId = (Long) authentication.getCredentials();
 		return userDatabaseAdapter.getById(principalId);

@@ -29,9 +29,4 @@ public class SignUpController implements SignUpEndpoints {
 				.build();
 	}
 
-	@GetMapping("/test")
-	public String test() {
-		return "Successfully signed up";
-	}
-
 }

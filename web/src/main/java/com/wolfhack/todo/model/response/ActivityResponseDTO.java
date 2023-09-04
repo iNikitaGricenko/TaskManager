@@ -1,11 +1,13 @@
 package com.wolfhack.todo.model.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+@Schema
 public record ActivityResponseDTO(
 		Long id,
 		Long userId,

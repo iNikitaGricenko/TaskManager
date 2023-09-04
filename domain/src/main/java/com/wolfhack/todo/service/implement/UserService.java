@@ -1,6 +1,7 @@
 package com.wolfhack.todo.service.implement;
 
 import com.wolfhack.todo.adapter.database.UserDatabaseAdapter;
+import com.wolfhack.todo.exception.NotFoundException;
 import com.wolfhack.todo.wrapper.DomainPage;
 import com.wolfhack.todo.model.User;
 import com.wolfhack.todo.service.IUserService;
@@ -42,7 +43,7 @@ public class UserService implements IUserService {
 	@Override
 	public void login(User user) {
 		if (user.getId() == null) {
-			throw new RuntimeException();
+			throw new NotFoundException("User not found");
 		}
 
 		user.login();

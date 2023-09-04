@@ -17,35 +17,40 @@ public class EntityActivity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private Long id;
 
 	@ManyToOne
+	@JoinColumn(name = "user_id", nullable = false)
 	private EntityUser user;
 
 	@ManyToOne
+	@JoinColumn(name = "task", referencedColumnName = "id")
 	private EntityTask task;
 
 	@ManyToOne
+	@JoinColumn(name = "created_by_id", nullable = false)
 	private EntityUser createdBy;
 
 	@ManyToMany
+	@JoinColumn(name = "updated_by_id")
 	@ToString.Exclude
 	private List<EntityUser> updatedBy = new LinkedList<>();
 
-	@Column(name = "title")
+	@Column(name = "title", unique = true, nullable = false)
 	private String title;
 
 	@Column(name = "description")
 	private String description;
 
-	@Column(name = "status")
+	@Column(name = "status", nullable = false)
 	@Enumerated(EnumType.STRING)
 	private ActivityStatus status;
 
-	@Column(name = "hours")
+	@Column(name = "hours", nullable = false)
 	private float hours;
 
-	@Column(name = "created_at")
+	@Column(name = "created_at", nullable = false)
 	private LocalDate createdAt;
 
 	@Column(name = "updated_at")
