@@ -14,6 +14,8 @@ public class Comment implements DomainModel {
 
 	private Activity activity;
 
+	private User user;
+
 	private String title;
 
 	private LocalDateTime createdAt;

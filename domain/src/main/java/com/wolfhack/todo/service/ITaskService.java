@@ -10,20 +10,22 @@ public interface ITaskService {
 
 	Long create(Task task);
 
-	Task get(Long id);
+	void start(long id);
+
+	Task get(long id);
 
 	DomainPage<Task> getPage(Pageable pageable);
 
-	void update(Long id, Task task);
+	void update(long id, Task task);
 
-	void addTag(Long id, Long tagId);
+	void addTag(long id, long tagId);
 
-	DomainPage<Activity> getActivities(Long id, Pageable pageable);
+	DomainPage<Activity> getActivities(long id, Pageable pageable);
 
-	DomainPage<Comment> getComments(Long id, Pageable pageable);
+	DomainPage<Comment> getComments(long id, Pageable pageable);
 
-	void assignUser(Long id, Long userId);
+	void assignUser(long id, long userId);
 
-	Long finish(Long id);
+	long finish(long id);
 
 }

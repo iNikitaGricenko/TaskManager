@@ -8,7 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 @RequiredArgsConstructor
 public enum Role implements GrantedAuthority {
 
-	NONE("ROLE_USER"),
+	DEFAULT("ROLE_USER"),
 	JUNIOR("ROLE_USER"),
 	MIDDLE("ROLE_USER"),
 	SENIOR("ROLE_USER"),

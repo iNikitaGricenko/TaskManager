@@ -13,6 +13,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,40 +26,69 @@ public class ActivityService implements IActivityService {
 	private final UserDatabaseAdapter userDatabaseAdapter;
 
 	@Override
-	public Long createActivity(Long taskId, Activity activity) {
+	public Long create(Long taskId, Activity activity) {
 		if (!taskDatabaseAdapter.exists(taskId)) {
 			throw new RuntimeException();
 		}
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if ((authentication instanceof AnonymousAuthenticationToken)) {
+			throw new RuntimeException();
+		}
+
 		activity.create();
 		activity.setTaskId(taskId);
+
+		Long principalId = (Long) authentication.getCredentials();
+		User user = userDatabaseAdapter.getById(principalId);
+
+		activity.setCreatedBy(user);
 
 		return activityDatabaseAdapter.save(activity);
 	}
 
 	@Override
-	public void startActivity(Long id, Long userId) {
-		if (!userDatabaseAdapter.exists(userId)) {
+	public void start(Long id) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if ((authentication instanceof AnonymousAuthenticationToken)) {
 			throw new RuntimeException();
 		}
+
 		Activity activity = activityDatabaseAdapter.getById(id);
 		activity.start();
-		User user = userDatabaseAdapter.getById(userId);
+
+		Long principalId = (Long) authentication.getCredentials();
+		User user = userDatabaseAdapter.getById(principalId);
 		activity.setUser(user);
+
 		activity.setUpdatedAt(LocalDate.now());
 
 		activityDatabaseAdapter.update(id, activity);
 	}
 
 	@Override
-	public void updateActivity(Long id, Activity activity) {
+	public void update(Long id, Activity activity) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if ((authentication instanceof AnonymousAuthenticationToken)) {
 			throw new RuntimeException();
 		}
-		// userDetails = authentication.getPrincipal()
+		Long principalId = (Long) authentication.getCredentials();
+		User user = userDatabaseAdapter.getById(principalId);
 
 		activity.setUpdatedAt(LocalDate.now());
-//		activity.setUpdatedBy(userDetails);
+
+		List<User> updatedBy = Optional.ofNullable(activity.getUpdatedBy()).orElse(new LinkedList<>());
+		updatedBy.add(user);
+		activity.setUpdatedBy(updatedBy);
+
 		activityDatabaseAdapter.update(id, activity);
+	}
+
+	@Override
+	public Long finish(Long id) {
+		Activity activity = activityDatabaseAdapter.getById(id);
+		activity.finish();
+		update(id, activity);
+		return id;
 	}
 }

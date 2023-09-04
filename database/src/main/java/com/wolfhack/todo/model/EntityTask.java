@@ -40,6 +40,7 @@ public class EntityTask {
 	private String description;
 
 	@Column(name = "status")
+	@Enumerated(EnumType.STRING)
 	private TaskStatus status;
 
 	@Column(name = "hours")

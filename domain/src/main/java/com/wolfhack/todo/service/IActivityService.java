@@ -4,10 +4,12 @@ import com.wolfhack.todo.model.Activity;
 
 public interface IActivityService {
 
-	Long createActivity(Long taskId, Activity activity);
+	Long create(Long taskId, Activity activity);
 
-	void startActivity(Long id, Long userId);
+	void start(Long id);
 
-	void updateActivity(Long id, Activity activity);
+	void update(Long id, Activity activity);
+
+	Long finish(Long id);
 
 }

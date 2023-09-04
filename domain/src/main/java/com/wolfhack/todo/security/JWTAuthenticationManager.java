@@ -24,7 +24,7 @@ public class JWTAuthenticationManager implements AuthenticationManager {
 	}
 
 	private UsernamePasswordAuthenticationToken getAuthorities(UserSecurity userAuthority) {
-		return new UsernamePasswordAuthenticationToken(userAuthority, userAuthority.getUsername(), userAuthority.getAuthorities());
+		return new UsernamePasswordAuthenticationToken(userAuthority.getUsername(), userAuthority.getId(), userAuthority.getAuthorities());
 	}
 
 }

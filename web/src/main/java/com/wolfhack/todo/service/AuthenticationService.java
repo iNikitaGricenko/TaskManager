@@ -32,6 +32,7 @@ public class AuthenticationService implements IAuthenticationService {
 	@Override
 	public JwtResponse signIn(User user) {
 		User registeredUser = userService.getByUsername(user.getUsername());
+		userService.login(registeredUser);
 
 		if (!passwordEncoder.matches(user.getPassword(), registeredUser.getPassword())) {
 			throw new AuthenticationCredentialsNotFoundException("Username or password are not valid");
@@ -39,8 +40,7 @@ public class AuthenticationService implements IAuthenticationService {
 
 		String jwt = jwtSigner.create(user.getUsername());
 
-		UserSecurity userSecurity = new UserSecurity(registeredUser);
-		UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(jwt, jwt, null);
+		UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(registeredUser.getId(), jwt, null);
 		authenticationManager.authenticate(authentication);
 
 		return new JwtResponse(jwt);

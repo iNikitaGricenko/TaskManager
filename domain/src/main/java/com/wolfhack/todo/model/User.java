@@ -39,6 +39,8 @@ public class User implements DomainModel {
 		this.password = encoder.encode(password);
 		this.registrationDate = LocalDate.now();
 		this.role = Optional.ofNullable(this.role).orElse(Role.NONE);
+
+		login();
 	}
 
 	public void login() {

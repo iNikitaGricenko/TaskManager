@@ -39,6 +39,7 @@ public class EntityActivity {
 	private String description;
 
 	@Column(name = "status")
+	@Enumerated(EnumType.STRING)
 	private ActivityStatus status;
 
 	@Column(name = "hours")

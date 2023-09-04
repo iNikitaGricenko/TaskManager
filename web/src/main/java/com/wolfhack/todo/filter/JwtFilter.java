@@ -1,5 +1,6 @@
 package com.wolfhack.todo.filter;
 
+import com.wolfhack.todo.security.model.UserSecurity;
 import com.wolfhack.todo.security.service.JwtSigner;
 import com.wolfhack.todo.security.service.UserSecurityService;
 import io.jsonwebtoken.Claims;
@@ -48,9 +49,9 @@ public class JwtFilter extends OncePerRequestFilter {
 		}
 
 		// Get user identity and set it on the spring security context
-		UserDetails userDetails = userSecurityService.loadUserByUsername(jws.getBody().getSubject());
+		UserSecurity userDetails = (UserSecurity) userSecurityService.loadUserByUsername(jws.getBody().getSubject());
 
-		UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails.getUsername(), null, userDetails.getAuthorities());
+		UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails.getUsername(), userDetails.getId(), userDetails.getAuthorities());
 
 		authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 

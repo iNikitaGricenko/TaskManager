@@ -24,6 +24,9 @@ public class EntityComment {
 	@ManyToOne
 	private EntityActivity activity;
 
+	@ManyToOne
+	private EntityUser user;
+
 	@Column(name = "title")
 	private String title;
 

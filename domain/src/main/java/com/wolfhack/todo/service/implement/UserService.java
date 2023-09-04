@@ -39,4 +39,14 @@ public class UserService implements IUserService {
 		return userDatabaseAdapter.getByUsername(username);
 	}
 
+	@Override
+	public void login(User user) {
+		if (user.getId() == null) {
+			throw new RuntimeException();
+		}
+
+		user.login();
+		update(user.getId(), user);
+	}
+
 }

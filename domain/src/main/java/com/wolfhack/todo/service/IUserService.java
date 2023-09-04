@@ -15,4 +15,6 @@ public interface IUserService {
 	DomainPage<User> getPage(Pageable pageable);
 
 	User getByUsername(String username);
+
+	void login(User user);
 }
