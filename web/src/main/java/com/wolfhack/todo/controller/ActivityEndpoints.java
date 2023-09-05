@@ -6,13 +6,14 @@ import com.wolfhack.todo.model.create.ActivityCreateDTO;
 import com.wolfhack.todo.model.create.CommentCreateDTO;
 import com.wolfhack.todo.model.response.ActivityResponseDTO;
 import com.wolfhack.todo.model.update.ActivityUpdateDTO;
-import com.wolfhack.todo.wrapper.swagger.ActivityPage;
 import com.wolfhack.todo.wrapper.DomainPage;
+import com.wolfhack.todo.wrapper.swagger.ActivityPage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springdoc.core.converters.models.PageableAsQueryParam;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -39,7 +40,7 @@ public interface ActivityEndpoints {
 					schema = @Schema(
 							implementation = long.class)))
 	@Operation(description = "Create activity in task (Logged in user will be assigned to this activity)")
-	long create(@PathVariable Long taskId, @RequestBody ActivityCreateDTO activityCreateDTO);
+	long create(@PathVariable Long taskId, @Valid @RequestBody ActivityCreateDTO activityCreateDTO);
 
 	@PostMapping("/comment/{id}")
 	@ResponseStatus(HttpStatus.CREATED)
@@ -59,7 +60,7 @@ public interface ActivityEndpoints {
 					schema = @Schema(
 							implementation = long.class)))
 	@Operation(description = "Add comment to activity (Logged in user will be assigned to comment)")
-	long comment(@PathVariable Long id, @RequestBody CommentCreateDTO commentCreateDTO);
+	long comment(@PathVariable Long id, @Valid @RequestBody CommentCreateDTO commentCreateDTO);
 
 	@PostMapping("/start/{id}")
 	@ResponseStatus(HttpStatus.OK)
@@ -76,7 +77,7 @@ public interface ActivityEndpoints {
 	@Operation(description = "Starts activity (Logged in user will be assigned)")
 	void start(@PathVariable Long id);
 
-	@DeleteMapping("/finish/{id}")
+	@PostMapping("/finish/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ApiResponse(responseCode = "404",
 			description = "Activity not found",
@@ -90,6 +91,21 @@ public interface ActivityEndpoints {
 							implementation = void.class)))
 	@Operation(description = "Finishes activity")
 	void finish(@PathVariable Long id);
+
+	@DeleteMapping("/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	@ApiResponse(responseCode = "404",
+			description = "Activity not found",
+			content = @Content(
+					schema = @Schema(
+							implementation = ErrorBody.class)))
+	@ApiResponse(responseCode = "200",
+			description = "Deleted",
+			content = @Content(
+					schema = @Schema(
+							implementation = void.class)))
+	@Operation(description = "Delete activity")
+	void delete(@PathVariable Long id);
 
 	@PatchMapping("/{activityId}")
 	@ResponseStatus(HttpStatus.OK)
@@ -109,7 +125,7 @@ public interface ActivityEndpoints {
 					schema = @Schema(
 							implementation = void.class)))
 	@Operation(description = "Update activity using existing values")
-	void partialUpdate(@PathVariable Long activityId, @RequestBody ActivityUpdateDTO activityUpdateDTO);
+	void partialUpdate(@PathVariable Long activityId, @Valid @RequestBody ActivityUpdateDTO activityUpdateDTO);
 
 	@PutMapping("/{activityId}")
 	@ResponseStatus(HttpStatus.OK)
@@ -124,7 +140,7 @@ public interface ActivityEndpoints {
 					schema = @Schema(
 							implementation = void.class)))
 	@Operation(description = "Fully update activity")
-	void update(@PathVariable Long activityId, @RequestBody ActivityCreateDTO activityUpdateDTO);
+	void update(@PathVariable Long activityId, @Valid @RequestBody ActivityCreateDTO activityUpdateDTO);
 
 	@PageableAsQueryParam
 	@GetMapping("/{taskId}")
@@ -135,5 +151,19 @@ public interface ActivityEndpoints {
 							implementation = ActivityPage.class)))
 	@Operation(description = "returns page of activities in task")
 	DomainPage<ActivityResponseDTO> getPage(@PathVariable Long taskId, Pageable pageable);
+
+	@GetMapping("/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	@ApiResponse(responseCode = "404",
+			description = "Activity not found",
+			content = @Content(
+					schema = @Schema(
+							implementation = ErrorBody.class)))
+	@ApiResponse(responseCode = "200",
+			content = @Content(
+					schema = @Schema(
+							implementation = ActivityResponseDTO.class)))
+	@Operation(description = "returns activity")
+	ActivityResponseDTO getOne(@PathVariable Long id);
 
 }

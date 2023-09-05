@@ -1,4 +1,4 @@
-package com.wolfhack.todo.error;
+package com.wolfhack.todo.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

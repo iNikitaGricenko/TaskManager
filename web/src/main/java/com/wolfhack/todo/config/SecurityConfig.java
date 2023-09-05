@@ -47,7 +47,7 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain securityWebFilterChain(HttpSecurity http) throws Exception {
 		http.exceptionHandling(exceptionHandler -> exceptionHandler
-						.authenticationEntryPoint((request, response, accessDeniedException) -> response.setStatus(HttpStatus.UNAUTHORIZED.value()))
+						.authenticationEntryPoint((request, response, authenticationException) -> response.setStatus(HttpStatus.UNAUTHORIZED.value()))
 						.accessDeniedHandler((request, response, accessDeniedException) -> response.setStatus(HttpStatus.FORBIDDEN.value())))
 				.authorizeHttpRequests((authorize) ->
 						authorize.requestMatchers("/sign-up", "/sign-in", "/activate/**").anonymous()

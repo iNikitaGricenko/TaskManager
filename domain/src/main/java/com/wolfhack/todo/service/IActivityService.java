@@ -18,4 +18,7 @@ public interface IActivityService {
 
 	DomainPage<Activity> getPage(Long taskId, Pageable pageable);
 
+	Activity get(Long id);
+
+	void delete(Long id);
 }

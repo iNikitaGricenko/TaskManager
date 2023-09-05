@@ -1,11 +1,13 @@
 package com.wolfhack.todo.controller.implement;
 
+import com.wolfhack.todo.annotation.Endpoint;
 import com.wolfhack.todo.controller.TagEndpoints;
 import com.wolfhack.todo.mapper.WebTagMapper;
 import com.wolfhack.todo.mapper.WebTaskMapper;
 import com.wolfhack.todo.model.Tag;
 import com.wolfhack.todo.model.Task;
 import com.wolfhack.todo.model.create.TagCreateDTO;
+import com.wolfhack.todo.model.response.TagResponseDTO;
 import com.wolfhack.todo.model.response.TaskResponseDTO;
 import com.wolfhack.todo.service.ITagService;
 import com.wolfhack.todo.service.ITaskTagService;
@@ -28,15 +30,23 @@ public class TagController implements TagEndpoints {
 	private final WebTaskMapper taskMapper;
 
 	@Override
+	@Endpoint
 	public long create(TagCreateDTO tagCreateDTO) {
 		Tag tag = tagMapper.toModel(tagCreateDTO);
 		return tagService.create(tag);
 	}
 
 	@Override
+	@Endpoint
 	public DomainPage<TaskResponseDTO> getTasksByTag(Long tagId, Pageable pageable) {
 		DomainPage<Task> page = taskTagService.getTasksByTag(tagId, pageable);
 		List<TaskResponseDTO> responseDTOS = page.getContent().stream().map(taskMapper::toResponse).toList();
 		return new DomainPage<>(page, responseDTOS);
+	}
+
+	@Override
+	public TagResponseDTO getOne(Long id) {
+		Tag tag = tagService.get(id);
+		return tagMapper.toResponse(tag);
 	}
 }

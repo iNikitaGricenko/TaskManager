@@ -6,6 +6,7 @@ import com.wolfhack.todo.security.model.UserSecurity;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SecurityException;
+import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -33,10 +34,18 @@ public class JwtSigner {
 	}
 
 	public Jws<Claims> validate(String token) {
-		return Jwts.parserBuilder()
-				.setSigningKey(keyPair.getPrivate())
-				.build()
-				.parseClaimsJws(token);
+		try {
+			return Jwts.parserBuilder()
+					.setSigningKey(keyPair.getPrivate())
+					.build()
+					.parseClaimsJws(token);
+		} catch (SignatureException exception) {
+			throw new ForbiddenException("Token signature are invalid");
+		} catch (MalformedJwtException | SecurityException exception) {
+			throw new ForbiddenException("Token invalid");
+		} catch (ExpiredJwtException exception) {
+			throw new ForbiddenException("Token expired");
+		}
 	}
 
 	public UserSecurity validateAndReturnInfo(String token) {

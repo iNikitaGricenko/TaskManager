@@ -13,9 +13,22 @@ services:
       - "5432:5432"
     networks:
       - postgres-db
-  # End Mysql
+  # End Postgres
+
+  # Start Redis
+  redis:
+    image: 'bitnami/redis:latest'
+    ports:
+      - '6379:6379'
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    networks:
+      - redis-network
+  # End Redis
 
 networks:
   default: {}
   postgres-db:
     name: postgres
+  redis-network:
+    driver: bridge

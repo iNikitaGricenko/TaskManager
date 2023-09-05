@@ -104,6 +104,19 @@ public class ActivityService implements IActivityService {
 		return activityDatabaseAdapter.getByTask(taskId, pageable);
 	}
 
+	@Override
+	public Activity get(Long id) {
+		return activityDatabaseAdapter.getById(id);
+	}
+
+	@Override
+	public void delete(Long id) {
+		if (!activityDatabaseAdapter.exists(id)) {
+			throw new NotFoundException("Activity does not exist");
+		}
+		activityDatabaseAdapter.delete(id);
+	}
+
 	private void updateTask(Activity activity) {
 		Long taskId = activity.getTaskId();
 		Task task = taskDatabaseAdapter.getById(taskId);

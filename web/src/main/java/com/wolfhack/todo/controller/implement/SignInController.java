@@ -1,5 +1,6 @@
 package com.wolfhack.todo.controller.implement;
 
+import com.wolfhack.todo.annotation.Endpoint;
 import com.wolfhack.todo.controller.SignInEndpoints;
 import com.wolfhack.todo.mapper.WebUserMapper;
 import com.wolfhack.todo.model.User;
@@ -20,6 +21,7 @@ public class SignInController implements SignInEndpoints {
 	private final WebUserMapper userMapper;
 
 	@Override
+	@Endpoint
 	public ResponseEntity<?> signIn(UserLoginDTO userLoginDTO) {
 		User user = userMapper.toModel(userLoginDTO);
 		return ResponseEntity.ok()

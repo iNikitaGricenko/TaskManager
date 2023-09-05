@@ -1,8 +1,11 @@
 HELP.md
-target/
-!.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+/.mvn/wrapper/maven-wrapper.jar
+/.mvn/wrapper/maven-wrapper.properties
+mvnw
+mvnw.cmd
+**/src/main/resources/firebase-service-account.json
+**/src/main/resources/google-email.json
+**/target
 
 ### STS ###
 .apt_generated

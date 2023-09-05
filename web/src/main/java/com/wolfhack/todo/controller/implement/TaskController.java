@@ -1,15 +1,16 @@
 package com.wolfhack.todo.controller.implement;
 
+import com.wolfhack.todo.annotation.Endpoint;
 import com.wolfhack.todo.controller.TaskEndpoints;
 import com.wolfhack.todo.mapper.WebCommentMapper;
 import com.wolfhack.todo.mapper.WebTaskMapper;
 import com.wolfhack.todo.mapper.WebTaskMetaMapper;
 import com.wolfhack.todo.model.Comment;
-import com.wolfhack.todo.model.create.TaskMetaCreateDTO;
 import com.wolfhack.todo.model.Task;
 import com.wolfhack.todo.model.TaskMeta;
 import com.wolfhack.todo.model.create.CommentCreateDTO;
 import com.wolfhack.todo.model.create.TaskCreateDTO;
+import com.wolfhack.todo.model.create.TaskMetaCreateDTO;
 import com.wolfhack.todo.model.response.TaskResponseDTO;
 import com.wolfhack.todo.service.ICommentService;
 import com.wolfhack.todo.service.ITaskService;
@@ -35,6 +36,7 @@ public class TaskController implements TaskEndpoints {
 	private final WebTaskMetaMapper taskMetaMapper;
 
 	@Override
+	@Endpoint
 	public long create(TaskCreateDTO taskCreateDTO) {
 		Task task = taskMapper.toModel(taskCreateDTO);
 		Long taskId = taskService.create(task);
@@ -45,46 +47,60 @@ public class TaskController implements TaskEndpoints {
 	}
 
 	@Override
+	@Endpoint
 	public long comment(Long id, CommentCreateDTO commentCreateDTO) {
 		Comment comment = commentMapper.toModel(commentCreateDTO);
 		return commentService.addCommentToTask(comment, id);
 	}
 
 	@Override
+	@Endpoint
 	public void assign(Long taskId, Long userId) {
 		taskService.assignUser(taskId, userId);
 	}
 
 	@Override
+	@Endpoint
 	public void unassign(Long taskId) {
 		taskService.unassign(taskId);
 	}
 
 	@Override
+	@Endpoint
 	public void start(Long id) {
 		taskService.start(id);
 	}
 
 	@Override
+	@Endpoint
 	public long addMeta(Long id, TaskMetaCreateDTO taskMetaDTO) {
 		TaskMeta taskMeta = taskMetaMapper.toModel(taskMetaDTO);
 		return taskService.addMeta(id, taskMeta);
 	}
 
 	@Override
+	@Endpoint
 	public void finish(Long id) {
 		taskService.finish(id);
 	}
 
 	@Override
+	@Endpoint
 	public void delete(Long id) {
 		taskService.delete(id);
 	}
 
 	@Override
+	@Endpoint
 	public DomainPage<TaskResponseDTO> getPage(Pageable pageable) {
 		DomainPage<Task> page = taskService.getPage(pageable);
 		List<TaskResponseDTO> responseDTOS = page.getContent().stream().map(taskMapper::toResponse).toList();
 		return new DomainPage<>(page, responseDTOS);
+	}
+
+	@Override
+	public TaskResponseDTO getOne(Long id) {
+		Task task = taskService.get(id);
+		return taskMapper.toResponse(task);
 	}
 }

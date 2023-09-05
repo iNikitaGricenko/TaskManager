@@ -1,9 +1,6 @@
 package com.wolfhack.todo.exception.handler;
 
-import com.wolfhack.todo.exception.BadRequestException;
-import com.wolfhack.todo.exception.ForbiddenException;
-import com.wolfhack.todo.exception.NotFoundException;
-import com.wolfhack.todo.exception.UnauthorizedException;
+import com.wolfhack.todo.exception.*;
 import com.wolfhack.todo.exception.error.ErrorBody;
 import com.wolfhack.todo.exception.error.ValidationErrorBody;
 import jakarta.validation.ValidationException;
@@ -13,10 +10,13 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -27,6 +27,7 @@ import static java.util.stream.Collectors.toList;
 import static org.springframework.http.HttpStatus.*;
 
 @ControllerAdvice
+@RestControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class WebExceptionHandler extends ResponseEntityExceptionHandler {
 
@@ -59,9 +60,24 @@ public class WebExceptionHandler extends ResponseEntityExceptionHandler {
 		return handleException(exception, request, NOT_FOUND);
 	}
 
+	@ExceptionHandler(EntityNotFound.class)
+	public ResponseEntity<Object> handleEntityNotFound(EntityNotFound exception, WebRequest request) {
+		return handleException(exception, request, NOT_FOUND);
+	}
+
 	@ExceptionHandler(UnauthorizedException.class)
 	public ResponseEntity<Object> handleUnauthorizedException(UnauthorizedException exception, WebRequest request) {
 		return handleException(exception, request, UNAUTHORIZED);
+	}
+
+	@ExceptionHandler(AuthenticationException.class)
+	public ResponseEntity<Object> handleAuthenticationException(AuthenticationException exception, WebRequest request) {
+		return handleException(exception, request, UNAUTHORIZED);
+	}
+
+	@ExceptionHandler(AccessDeniedException.class)
+	public ResponseEntity<Object> handleAccessDeniedException(AccessDeniedException exception, WebRequest request) {
+		return handleException(exception, request, FORBIDDEN);
 	}
 
 	private ResponseEntity<Object> handleException(Exception exception, WebRequest request, HttpStatus status) {

@@ -2,9 +2,9 @@ package com.wolfhack.todo.controller;
 
 import com.wolfhack.todo.exception.error.ErrorBody;
 import com.wolfhack.todo.exception.error.ValidationErrorBody;
-import com.wolfhack.todo.model.create.TaskMetaCreateDTO;
 import com.wolfhack.todo.model.create.CommentCreateDTO;
 import com.wolfhack.todo.model.create.TaskCreateDTO;
+import com.wolfhack.todo.model.create.TaskMetaCreateDTO;
 import com.wolfhack.todo.model.response.TaskResponseDTO;
 import com.wolfhack.todo.wrapper.DomainPage;
 import com.wolfhack.todo.wrapper.swagger.TaskPage;
@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springdoc.core.converters.models.PageableAsQueryParam;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -34,7 +35,7 @@ public interface TaskEndpoints {
 					schema = @Schema(
 							implementation = long.class)))
 	@Operation(description = "Creates new task")
-	long create(@RequestBody TaskCreateDTO taskCreateDTO);
+	long create(@Valid @RequestBody TaskCreateDTO taskCreateDTO);
 
 	@PostMapping("/comment/{id}")
 	@ResponseStatus(HttpStatus.CREATED)
@@ -54,7 +55,7 @@ public interface TaskEndpoints {
 					schema = @Schema(
 							implementation = long.class)))
 	@Operation(description = "Add comment to tas (Logged in user will be assigned to comment)")
-	long comment(@PathVariable Long id, @RequestBody CommentCreateDTO commentCreateDTO);
+	long comment(@PathVariable Long id, @Valid @RequestBody CommentCreateDTO commentCreateDTO);
 
 	@PatchMapping("/assign/{taskId}/{userId}")
 	@ResponseStatus(HttpStatus.OK)
@@ -119,9 +120,9 @@ public interface TaskEndpoints {
 					schema = @Schema(
 							implementation = long.class)))
 	@Operation(description = "Adds meta to task (additional information)")
-	long addMeta(@PathVariable Long id, @RequestBody TaskMetaCreateDTO taskMetaDTO);
+	long addMeta(@PathVariable Long id, @Valid @RequestBody TaskMetaCreateDTO taskMetaDTO);
 
-	@DeleteMapping("/finish/{id}")
+	@PostMapping("/finish/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ApiResponse(responseCode = "404",
 			description = "Task not found",
@@ -160,5 +161,19 @@ public interface TaskEndpoints {
 							implementation = TaskPage.class)))
 	@Operation(description = "returns page of task")
 	DomainPage<TaskResponseDTO> getPage(Pageable pageable);
+
+	@GetMapping("/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	@ApiResponse(responseCode = "404",
+			description = "Activity not found",
+			content = @Content(
+					schema = @Schema(
+							implementation = ErrorBody.class)))
+	@ApiResponse(responseCode = "200",
+			content = @Content(
+					schema = @Schema(
+							implementation = TaskResponseDTO.class)))
+	@Operation(description = "returns task")
+	TaskResponseDTO getOne(@PathVariable Long id);
 
 }

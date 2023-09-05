@@ -1,5 +1,6 @@
 package com.wolfhack.todo.exception.error;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ValidationErrorBody {
 	private final LocalDateTime timestamp = LocalDateTime.now();
 	@Schema(example = "400") private final int status;
