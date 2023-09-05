@@ -7,6 +7,7 @@ import com.wolfhack.todo.exception.NotFoundException;
 import com.wolfhack.todo.exception.UnauthorizedException;
 import com.wolfhack.todo.model.Activity;
 import com.wolfhack.todo.model.Task;
+import com.wolfhack.todo.model.TaskStatus;
 import com.wolfhack.todo.model.User;
 import com.wolfhack.todo.service.IActivityService;
 import com.wolfhack.todo.wrapper.DomainPage;
@@ -34,6 +35,15 @@ public class ActivityService implements IActivityService {
 	public Long create(Long taskId, Activity activity) {
 		if (!taskDatabaseAdapter.exists(taskId)) {
 			throw new NotFoundException("Task does not exist");
+		}
+
+		Task task = taskDatabaseAdapter.getById(taskId);
+		if (task.getStatus() == TaskStatus.STARTING) {
+			task.setStatus(TaskStatus.IN_PROGRESS);
+			if (task.getUser() == null) {
+				task.setUser(getCurrentUser());
+			}
+			taskDatabaseAdapter.update(taskId, task);
 		}
 
 		activity.create();
